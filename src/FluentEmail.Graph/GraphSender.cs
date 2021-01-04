@@ -14,6 +14,10 @@
     using Microsoft.Graph.Auth;
     using Microsoft.Identity.Client;
 
+    /// <summary>
+    /// Implementation of <c>ISender</c> for the Microsoft Graph API.
+    /// See <see cref="FluentEmailServicesBuilderExtensions"/>.
+    /// </summary>
     public class GraphSender : ISender
     {
         private readonly bool saveSent;
@@ -22,10 +26,10 @@
 
         public GraphSender(GraphSenderOptions options)
         {
-            this.saveSent = options.SaveSentItems;
+            this.saveSent = options.SaveSentItems ?? true;
 
             var clientApp = ConfidentialClientApplicationBuilder
-                .Create(options.AppId)
+                .Create(options.ClientId)
                 .WithTenantId(options.TenantId)
                 .WithClientSecret(options.Secret)
                 .Build();

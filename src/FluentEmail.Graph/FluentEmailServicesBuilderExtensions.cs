@@ -4,6 +4,9 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
 
+    /// <summary>
+    /// Contains extension methods to register the <see cref="GraphSender"/> with the <c>FluentEmailServicesBuilder</c> from <c>FluentEmail.Core</c>.
+    /// </summary>
     public static class FluentEmailServicesBuilderExtensions
     {
         public static FluentEmailServicesBuilder AddGraphSender(
@@ -16,14 +19,14 @@
 
         public static FluentEmailServicesBuilder AddGraphSender(
             this FluentEmailServicesBuilder builder,
-            string graphEmailAppId,
+            string graphEmailClientId,
             string graphEmailTenantId,
             string graphEmailSecret,
             bool saveSentItems = false)
         {
             var options = new GraphSenderOptions
             {
-                AppId = graphEmailAppId,
+                ClientId = graphEmailClientId,
                 TenantId = graphEmailTenantId,
                 Secret = graphEmailSecret,
                 SaveSentItems = saveSentItems,
