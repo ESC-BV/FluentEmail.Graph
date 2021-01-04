@@ -1,0 +1,7 @@
+mode: Mainline
+next-version: 1.0
+assembly-versioning-scheme: Major
+branches: {}
+ignore:
+  sha: []
+merge-message-formats: {}
