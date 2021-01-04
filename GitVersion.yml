@@ -1,9 +1,6 @@
 mode: Mainline
 next-version: 0.1
 assembly-versioning-scheme: Major
-branches:
-  master:
-    regex: ^master$|^main$
 ignore:
   sha: []
 merge-message-formats: {}
