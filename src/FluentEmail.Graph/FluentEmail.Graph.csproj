@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>David De Sloovere</Authors>
+    <Owner>Natch</Owner>
+    <Company>Natch</Company>
+    <Description>Sender for FluentEmail that uses Microsoft Graph API. Implements `FluentEmail.Core.Interfaces.ISender`.</Description>
+    <PackageTags>fluentemail sender isender graph</PackageTags>
     <PackageProjectUrl>https://github.com/NatchEurope/FluentEmail.Graph</PackageProjectUrl>
     <PackageIcon>icon.png</PackageIcon>
     <DocumentationFile>bin\$(Configuration)\FluentEmail.Graph.xml</DocumentationFile>
@@ -11,12 +16,9 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <DebugType>embedded</DebugType>
     <LangVersion>latest</LangVersion>
-    <Authors>David De Sloovere</Authors>
-    <Owner>NatchEurope</Owner>
-    <Company>Natch</Company>
-    <Description>Sender for FluentEmail that uses Microsoft Graph API.</Description>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageTags>fluentemail sender isender graph</PackageTags>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>0.0.1</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,10 +26,11 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="..\..\LICENSE">
+    <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+
   </ItemGroup>
 
   <ItemGroup>
