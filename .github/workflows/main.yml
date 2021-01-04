@@ -31,6 +31,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: nuget sources
+        run: dotnet nuget list source
+
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.7
         with:
