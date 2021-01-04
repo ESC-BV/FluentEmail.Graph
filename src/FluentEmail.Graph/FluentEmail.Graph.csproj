@@ -7,11 +7,8 @@
     <DocumentationFile>bin\$(Configuration)\FluentEmail.Graph.xml</DocumentationFile>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <!-- Recommended: Embed symbols containing Source Link in the main file (exe/dll) -->
     <DebugType>embedded</DebugType>
     <LangVersion>latest</LangVersion>
     <Authors>David De Sloovere</Authors>
@@ -35,7 +32,9 @@
 
   <ItemGroup>
     <PackageReference Include="FluentEmail.Core" Version="2.8.0" />
-    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Graph" Version="3.21.0" />
     <PackageReference Include="Microsoft.Graph.Auth" Version="1.0.0-preview.6" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
