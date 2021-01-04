@@ -40,6 +40,7 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.7
         with:
           useConfigFile: true
+          additionalArguments: "/updateprojectfiles"
 
       - name: .NET SDK
         uses: actions/setup-dotnet@v1
@@ -57,11 +58,11 @@ jobs:
       - name: Pack
         run: dotnet pack ./src/FluentEmail.Graph/FluentEmail.Graph.csproj -c Release -o ./artifacts --no-build
 
-      - name: Push
-        run: dotnet nuget push "./artifacts/*.nupkg" --source "github"
-
       - name: Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: artifacts
           path: artifacts/**/*
+
+      - name: Push
+        run: dotnet nuget push "./artifacts/*.nupkg" --source "github"
