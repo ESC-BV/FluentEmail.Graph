@@ -32,3 +32,12 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       #    - name: Test
       #      run: dotnet test --no-restore --verbosity normal
+
+      - name: Pack
+        run: dotnet pack ./src/FluentEmail.Graph/FluentEmail.Graph.csproj -c Release -o ./artifacts --no-build
+
+      - name: Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: artifacts/**/*
