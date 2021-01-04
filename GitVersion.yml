@@ -1,6 +1,3 @@
 mode: Mainline
 next-version: 0.1
 assembly-versioning-scheme: Major
-ignore:
-  sha: []
-merge-message-formats: {}
