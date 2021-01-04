@@ -68,4 +68,4 @@ jobs:
           path: artifacts/**/*
 
       - name: Push
-        run: dotnet nuget push "./artifacts/*.nupkg" --source "github"
+        run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/NatchEurope/index.json" --api-key "${{secrets.GITHUB_TOKEN}}"
