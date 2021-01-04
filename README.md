@@ -13,7 +13,7 @@ Call one of the `AddGraphSender` extension methods.
 var graphSenderOptions = this.Configuration
     .GetSection("GraphSenderOptions")
     .Get<GraphSenderOptions>();
-services.AddFluentEmail("alias@test.com)
+services.AddFluentEmail("alias@test.com")
     .AddRazorRenderer()
     .AddGraphSender(graphSenderOptions);
 ```
@@ -21,13 +21,14 @@ services.AddFluentEmail("alias@test.com)
 Example config in `appsettings.json`
 
 ```json
+{
   "GraphSenderOptions": {
     "AppId": "your app id",
     "TenantId": "your tenant id",
     "Secret": "your secret here",
     "SaveSentItems": true
-  },
-
+  }
+}
 ```
 
 ## Origin
