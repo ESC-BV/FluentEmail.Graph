@@ -17,20 +17,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # # - name: nuget sources
-      # #   run: dotnet nuget list source
-
-      # # - name: Install GitVersion
-      # #   uses: gittools/actions/gitversion/setup@v0.9.7
-      # #   with:
-      # #     versionSpec: "5.x"
-
-      # # - name: Determine Version
-      # #   uses: gittools/actions/gitversion/execute@v0.9.7
-      # #   with:
-      # #     useConfigFile: true
-      # #     additionalArguments: "/updateprojectfiles"
-
       - name: .NET SDK
         uses: actions/setup-dotnet@v1
         with:
@@ -57,4 +43,4 @@ jobs:
       - name: Push
         run: |
           dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/NatchEurope/index.json" --api-key "${{secrets.GITHUB_TOKEN}}"
-          dotnet nuget push "./artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{secrets.GITHUB_TOKEN}}"
+          dotnet nuget push "./artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{secrets.NUGET_API_KEY}}"
