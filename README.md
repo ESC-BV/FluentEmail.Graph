@@ -2,7 +2,10 @@
 
 Sender for [FluentEmail](https://github.com/lukencode/FluentEmail) that uses [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/api/resources/mail-api-overview?view=graph-rest-1.0).
 
+![Nuget](https://img.shields.io/nuget/v/FluentEmail.Graph)
+
 ![CI](https://github.com/NatchEurope/FluentEmail.Graph/workflows/CI/badge.svg)
+![CodeQL](https://github.com/NatchEurope/FluentEmail.Graph/workflows/CodeQL/badge.svg)
 ![Publish](https://github.com/NatchEurope/FluentEmail.Graph/workflows/Publish/badge.svg)
 
 ## Usage
