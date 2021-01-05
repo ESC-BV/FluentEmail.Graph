@@ -13,6 +13,7 @@ jobs:
 
     env:
       DOTNET_NOLOGO: true
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
     steps:
       - name: Checkout
