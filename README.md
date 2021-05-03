@@ -34,6 +34,10 @@ Example config in `appsettings.json`
 }
 ```
 
+## Release
+
+Add tag to main branch and start [publish](https://github.com/NatchEurope/FluentEmail.Graph/actions/workflows/publish.yml) manually.
+
 ## Origin
 
 Code originally written by [Matt Goldman](https://github.com/matt-goldman) and [merged](https://github.com/lukencode/FluentEmail/pull/218) into FluentEmail repo. But it was not published to NuGet until January 2021. Because we needed this implementation we created a separate repo, modified the code a bit and published it to NuGet.
