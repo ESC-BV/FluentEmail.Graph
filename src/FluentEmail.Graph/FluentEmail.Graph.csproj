@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentEmail.Core" Version="3.0.0" />
-    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0">
+    <PackageReference Include="JetBrains.Annotations" Version="2021.2.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Graph" Version="3.32.0" />
