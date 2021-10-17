@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Azure.Identity;
     using FluentEmail.Core;
     using FluentEmail.Core.Interfaces;
     using FluentEmail.Core.Models;
@@ -28,14 +29,9 @@
         {
             this.saveSent = options.SaveSentItems ?? true;
 
-            var clientApp = ConfidentialClientApplicationBuilder
-                .Create(options.ClientId)
-                .WithTenantId(options.TenantId)
-                .WithClientSecret(options.Secret)
-                .Build();
+            ClientSecretCredential spn = new ClientSecretCredential(options.TenantId, options.ClientId, options.Secret);
 
-            var authProvider = new ClientCredentialProvider(clientApp);
-            this.graphClient = new GraphServiceClient(authProvider);
+            this.graphClient = new (spn);
         }
 
         public SendResponse Send(IFluentEmail email, CancellationToken? token = null)
