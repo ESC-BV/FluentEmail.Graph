@@ -12,8 +12,6 @@
     using FluentEmail.Core.Models;
     using JetBrains.Annotations;
     using Microsoft.Graph;
-    using Microsoft.Graph.Auth;
-    using Microsoft.Identity.Client;
 
     /// <summary>
     /// Implementation of <c>ISender</c> for the Microsoft Graph API.
