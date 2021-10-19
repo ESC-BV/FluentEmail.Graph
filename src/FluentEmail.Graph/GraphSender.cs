@@ -6,13 +6,12 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Azure.Identity;
     using FluentEmail.Core;
     using FluentEmail.Core.Interfaces;
     using FluentEmail.Core.Models;
     using JetBrains.Annotations;
     using Microsoft.Graph;
-    using Microsoft.Graph.Auth;
-    using Microsoft.Identity.Client;
 
     /// <summary>
     /// Implementation of <c>ISender</c> for the Microsoft Graph API.
@@ -28,14 +27,9 @@
         {
             this.saveSent = options.SaveSentItems ?? true;
 
-            var clientApp = ConfidentialClientApplicationBuilder
-                .Create(options.ClientId)
-                .WithTenantId(options.TenantId)
-                .WithClientSecret(options.Secret)
-                .Build();
+            ClientSecretCredential spn = new ClientSecretCredential(options.TenantId, options.ClientId, options.Secret);
 
-            var authProvider = new ClientCredentialProvider(clientApp);
-            this.graphClient = new GraphServiceClient(authProvider);
+            this.graphClient = new (spn);
         }
 
         public SendResponse Send(IFluentEmail email, CancellationToken? token = null)
