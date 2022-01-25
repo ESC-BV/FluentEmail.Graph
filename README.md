@@ -36,7 +36,9 @@ Example config in `appsettings.json`
 
 ## Release
 
-Add tag to main branch and start [publish](https://github.com/NatchEurope/FluentEmail.Graph/actions/workflows/publish.yml) manually.
+Create release with creation of new tag on main branch.
+
+Start [publish](https://github.com/NatchEurope/FluentEmail.Graph/actions/workflows/publish.yml) manually.
 
 ## Origin
 
