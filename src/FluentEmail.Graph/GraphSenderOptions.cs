@@ -19,10 +19,5 @@
         /// Gets or sets the secret string previously shared with AAD at application registration to prove the identity of the application (the client) requesting the tokens.
         /// </summary>
         public string Secret { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to save the message in Sent Items. Default is <c>true</c>.
-        /// </summary>
-        public bool? SaveSentItems { get; set; }
     }
 }
