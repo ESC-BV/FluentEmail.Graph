@@ -42,5 +42,5 @@ jobs:
 
       - name: Push
         run: |
-          dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/NatchEurope/index.json" --api-key "${{secrets.GITHUB_TOKEN}}"
+          dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/ESC-BV/index.json" --api-key "${{secrets.GITHUB_TOKEN}}"
           dotnet nuget push "./artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{secrets.NUGET_API_KEY}}"
