@@ -41,7 +41,7 @@
     <PackageReference Include="JetBrains.Annotations" Version="2022.1.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Graph" Version="4.16.0" />
+    <PackageReference Include="Microsoft.Graph" Version="4.29.0" />
     <PackageReference Include="Microsoft.Graph.Auth" Version="1.0.0-preview.7" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.43.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
