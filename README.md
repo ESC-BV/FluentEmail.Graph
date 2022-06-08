@@ -4,9 +4,9 @@ Sender for [FluentEmail](https://github.com/lukencode/FluentEmail) that uses [Mi
 
 ![Nuget](https://img.shields.io/nuget/v/FluentEmail.Graph)
 
-![CI](https://github.com/NatchEurope/FluentEmail.Graph/workflows/CI/badge.svg)
-![CodeQL](https://github.com/NatchEurope/FluentEmail.Graph/workflows/CodeQL/badge.svg)
-![Publish](https://github.com/NatchEurope/FluentEmail.Graph/workflows/Publish/badge.svg)
+![CI](https://github.com/ESC-BV/FluentEmail.Graph/workflows/CI/badge.svg)
+![CodeQL](https://github.com/ESC-BV/FluentEmail.Graph/workflows/CodeQL/badge.svg)
+![Publish](https://github.com/ESC-BV/FluentEmail.Graph/workflows/Publish/badge.svg)
 
 ## Usage
 
@@ -38,7 +38,7 @@ Example config in `appsettings.json`
 
 Create new release with creation of new tag on main branch.
 
-Start [publish](https://github.com/NatchEurope/FluentEmail.Graph/actions/workflows/publish.yml) manually, for the new tag. This will push the package to github and nuget.org
+Start [publish](https://github.com/ESC-BV/FluentEmail.Graph/actions/workflows/publish.yml) manually, for the new tag. This will push the package to github and nuget.org
 
 ## Origin
 
