@@ -1,13 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>David De Sloovere</Authors>
-    <Owner>Natch</Owner>
-    <Company>Natch</Company>
+    <Owner>ESC</Owner>
+    <Company>ESC</Company>
     <Description>Sender for FluentEmail that uses Microsoft Graph API. Implements `FluentEmail.Core.Interfaces.ISender`.</Description>
     <PackageTags>fluentemail sender isender graph</PackageTags>
-    <PackageProjectUrl>https://github.com/NatchEurope/FluentEmail.Graph</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/ESC-BV/FluentEmail.Graph</PackageProjectUrl>
     <PackageIcon>icon.png</PackageIcon>
     <DocumentationFile>bin\$(Configuration)\FluentEmail.Graph.xml</DocumentationFile>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
