@@ -41,7 +41,7 @@
     <PackageReference Include="JetBrains.Annotations" Version="2022.1.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Graph" Version="4.29.0" />
+    <PackageReference Include="Microsoft.Graph" Version="4.32.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.44.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
