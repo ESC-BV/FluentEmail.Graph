@@ -50,8 +50,9 @@ class Program
 
         if (addAttachment)
         {
-            Console.WriteLine("Adding attachment - this will use another Graph API endpoint that needs the Mail.ReadWrite permission.");
-            email.AttachFromFilename("TestAttachment.txt");
+            Console.WriteLine("Adding attachments - this will use another Graph API endpoint that needs the Mail.ReadWrite permission.");
+            email.AttachFromFilename("TestAttachmentSmall.txt");
+            email.AttachFromFilename("TestAttachmentLarge.txt");
         }
         else
         {
