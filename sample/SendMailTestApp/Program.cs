@@ -20,13 +20,13 @@ class Program
         var fromAddress = configurationRoot.GetValue<string>("MailOptions:FromAddress");
 
         var services = new ServiceCollection();
-        services.AddScoped<IFluentEmail, Email>();
+        services.AddScoped<IFluentEmailFactory, FluentEmailFactory>();
         services.AddFluentEmail(fromAddress)
             .AddGraphSender(graphSenderOptions);
         var serviceProvider = services.BuildServiceProvider();
 
         // get mail service and out Graph sender
-        var email = serviceProvider.GetRequiredService<IFluentEmail>();
+        var emailFactory = serviceProvider.GetRequiredService<IFluentEmailFactory>();
         var sender = serviceProvider.GetRequiredService<ISender>();
         if (sender is not GraphSender)
         {
@@ -37,10 +37,26 @@ class Program
 
         Console.WriteLine("Enter destination e-mail address to send test mail to:");
         var destinationAddress = Console.ReadLine();
-        email.To(destinationAddress)
+
+        Console.WriteLine("Add attachments? Type 'Y' for yes.");
+        var addAttachment = (Console.ReadLine() ?? string.Empty).Equals("Y", StringComparison.OrdinalIgnoreCase);
+
+        var email = emailFactory.Create();
+        email.SetFrom(fromAddress)
+            .To(destinationAddress)
             .Subject("Test Email Graph API")
             .Body("This is the <b>body</b> of the mail.");
         email.Data.IsHtml = true;
+
+        if (addAttachment)
+        {
+            Console.WriteLine("Adding attachment - this will use another Graph API endpoint that needs the Mail.ReadWrite permission.");
+            email.AttachFromFilename("TestAttachment.txt");
+        }
+        else
+        {
+            Console.WriteLine("Not adding attachment - this will use default Graph API endpoint that needs the Mail.Send permission.");
+        }
 
         var response = await sender.SendAsync(email);
         if (response.Successful)
@@ -52,11 +68,10 @@ class Program
             Console.WriteLine("Mail was NOT sent.");
             foreach (var errorMessage in response.ErrorMessages)
             {
-                Console.WriteLine("- " + errorMessage);
+                Console.WriteLine("ERROR");
+                Console.WriteLine(errorMessage);
             }
         }
-
-        Console.ReadKey();
     }
 
     private static IConfigurationRoot GetConfigurationRoot(string[] args)

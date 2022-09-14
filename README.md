@@ -36,16 +36,35 @@ Example config in `appsettings.json`
 
 ## v2
 
-Uses an upload session for sending emails with attachments that are 3MB or larger. Contributed
-by [@huntmj01](https://github.com/huntmj01).
+The original version only used
+the [user: sendMail](https://docs.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=http) Graph API
+endpoint. This could not handle attachments over 3MB.
+
+Starting with v2, if you have included any attachments, the implementation will switch to the following:
+
+- A [draft message](https://docs.microsoft.com/en-us/graph/api/user-post-messages?view=graph-rest-1.0&tabs=http) is
+  created
+- Attachments are added
+  using [attachment: createUploadSession](https://docs.microsoft.com/en-us/graph/api/attachment-createuploadsession?view=graph-rest-1.0&tabs=http)
+- The mail is sent
+  using [message: send](https://docs.microsoft.com/en-us/graph/api/message-send?view=graph-rest-1.0&tabs=http).
 
 [Microsoft Docs on using the Graph API to send large attachments](https://docs.microsoft.com/en-us/graph/outlook-large-attachments?tabs=csharp)
 
-Unfortunately, the Microsoft Graph API `Send` method does not have a `SaveSentItems` argument like the `SendMail` method
+REMOVED: Unfortunately, the Microsoft Graph API `Send` method does not have a `SaveSentItems` argument like
+the `SendMail` method
 that was previously used. The `SaveSentItems` option has been removed and there is no way to disable this anymore. (
 See [Link 1](https://docs.microsoft.com/en-us/answers/questions/337574/graph-sdk-i-want-to-send-the-saved-draft-mail-but.html)
 , [Link 2](https://docs.microsoft.com/en-us/graph/api/message-send?view=graph-rest-1.0&tabs=http),
 and [Link 3](https://github.com/microsoftgraph/msgraph-sdk-dotnet/issues/743)).
+
+Uploading attachments to a draft message was contributed by [@huntmj01](https://github.com/huntmj01).
+
+## Graph API Permissions
+
+Adding attachments? The `Mail.ReadWrite` permission is required.
+
+Otherwise `Mail.Send`.
 
 ## Release
 

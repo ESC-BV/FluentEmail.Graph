@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -10,7 +11,6 @@
     using FluentEmail.Core;
     using FluentEmail.Core.Interfaces;
     using FluentEmail.Core.Models;
-    using JetBrains.Annotations;
     using Microsoft.Graph;
 
     /// <summary>
@@ -43,9 +43,14 @@
         {
             try
             {
-                var message = await this.CreateMessage(email);
+                if (email.Data.Attachments?.Any() == true)
+                {
+                    var draftMessage = await this.SendWithAttachments(email);
 
-                await this.SendMessage(email, message);
+                    return new SendResponse { MessageId = draftMessage.Id, };
+                }
+
+                var message = await this.SendWithoutAttachments(email);
 
                 return new SendResponse { MessageId = message.Id, };
             }
@@ -55,54 +60,29 @@
             }
         }
 
-        private static IList<Recipient> CreateRecipientList(IEnumerable<Address> addressList)
+        private async Task<Message> SendWithoutAttachments(IFluentEmail email)
         {
-            if (addressList == null)
-            {
-                return new List<Recipient>();
-            }
+            // https://docs.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=http
+            var message = MessageCreation.CreateGraphMessageFromFluentEmail(email);
+            await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
+                .SendMail(message)
+                .Request()
+                .PostAsync();
 
-            return addressList.Select(ConvertToRecipient)
-                .ToList();
+            return message;
         }
 
-        private static Recipient ConvertToRecipient([NotNull] Address address)
+        private async Task<Message> SendWithAttachments(IFluentEmail email)
         {
-            if (address is null)
-            {
-                throw new ArgumentNullException(nameof(address));
-            }
+            // https://docs.microsoft.com/en-us/graph/api/user-post-messages?view=graph-rest-1.0&tabs=csharp
+            var draftMessage = await this.CreateDraftMessage(email);
+            await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
+                .Messages[draftMessage.Id]
+                .Send()
+                .Request()
+                .PostAsync();
 
-            return new Recipient
-            {
-                EmailAddress = new EmailAddress { Address = address.EmailAddress, Name = address.Name, },
-            };
-        }
-
-        private static void SetPriority(IFluentEmail email, Message draftMessage)
-        {
-            switch (email.Data.Priority)
-            {
-                case Priority.High:
-                    draftMessage.Importance = Importance.High;
-
-                    break;
-
-                case Priority.Normal:
-                    draftMessage.Importance = Importance.Normal;
-
-                    break;
-
-                case Priority.Low:
-                    draftMessage.Importance = Importance.Low;
-
-                    break;
-
-                default:
-                    draftMessage.Importance = Importance.Normal;
-
-                    break;
-            }
+            return draftMessage;
         }
 
         private static byte[] GetAttachmentBytes(Stream stream)
@@ -113,50 +93,34 @@
             return m.ToArray();
         }
 
-        private async Task<Message> CreateMessage(IFluentEmail email)
+        private async Task<Message> CreateDraftMessage(IFluentEmail email)
         {
-            var templateBody = new ItemBody
-            {
-                Content = email.Data.Body, ContentType = email.Data.IsHtml ? BodyType.Html : BodyType.Text,
-            };
+            var template = MessageCreation.CreateGraphMessageFromFluentEmail(email);
 
-            var template = new Message
-            {
-                Subject = email.Data.Subject,
-                Body = templateBody,
-                From = ConvertToRecipient(email.Data.FromAddress),
-                ReplyTo = CreateRecipientList(email.Data.ReplyToAddresses),
-                ToRecipients = CreateRecipientList(email.Data.ToAddresses),
-                CcRecipients = CreateRecipientList(email.Data.CcAddresses),
-                BccRecipients = CreateRecipientList(email.Data.BccAddresses),
-            };
+            var request = this.graphClient.Users[email.Data.FromAddress.EmailAddress]
+                .Messages.Request();
+            ////.MailFolders.Drafts.Messages.Request();
 
-            var draftMessage = await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
-                .MailFolders.Drafts.Messages.Request()
-                .AddAsync(template);
+            Trace.WriteLine(request.RequestUrl);
+            var draftMessage = await request.AddAsync(template);
 
-            if (email.Data.Attachments is { Count: > 0 })
+            foreach (var attachment in email.Data.Attachments)
             {
-                foreach (var attachment in email.Data.Attachments)
+                if (attachment.Data.Length < ThreeMbLimit)
                 {
-                    if (attachment.Data.Length < ThreeMbLimit)
-                    {
-                        await this.UploadAttachmentUnder3Mb(
-                            email,
-                            draftMessage,
-                            attachment);
-                    }
-                    else
-                    {
-                        await this.UploadAttachment3MbOrOver(
-                            email,
-                            draftMessage,
-                            attachment);
-                    }
+                    await this.UploadAttachmentUnder3Mb(
+                        email,
+                        draftMessage,
+                        attachment);
+                }
+                else
+                {
+                    await this.UploadAttachment3MbOrOver(
+                        email,
+                        draftMessage,
+                        attachment);
                 }
             }
-
-            SetPriority(email, draftMessage);
 
             return draftMessage;
         }
@@ -174,7 +138,10 @@
                 .AddAsync(attachment);
         }
 
-        private async Task UploadAttachment3MbOrOver(IFluentEmail email, Message draft, Core.Models.Attachment attachment)
+        private async Task UploadAttachment3MbOrOver(
+            IFluentEmail email,
+            Message draft,
+            Core.Models.Attachment attachment)
         {
             var attachmentItem = new AttachmentItem
             {
@@ -187,20 +154,9 @@
                 .Request()
                 .PostAsync();
 
-            var fileUploadTask = new LargeFileUploadTask<FileAttachment>(
-                uploadSession,
-                attachment.Data);
+            var fileUploadTask = new LargeFileUploadTask<FileAttachment>(uploadSession, attachment.Data);
 
             await fileUploadTask.UploadAsync();
-        }
-
-        private async Task SendMessage(IFluentEmail email, Message message)
-        {
-            await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
-                .Messages[message.Id]
-                .Send()
-                .Request()
-                .PostAsync();
         }
     }
 }
