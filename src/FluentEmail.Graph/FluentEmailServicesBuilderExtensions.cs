@@ -21,15 +21,13 @@
             this FluentEmailServicesBuilder builder,
             string graphEmailClientId,
             string graphEmailTenantId,
-            string graphEmailSecret,
-            bool saveSentItems = false)
+            string graphEmailSecret)
         {
             var options = new GraphSenderOptions
             {
                 ClientId = graphEmailClientId,
                 TenantId = graphEmailTenantId,
                 Secret = graphEmailSecret,
-                SaveSentItems = saveSentItems,
             };
             return builder.AddGraphSender(options);
         }
