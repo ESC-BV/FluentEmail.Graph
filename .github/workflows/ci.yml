@@ -12,6 +12,7 @@ jobs:
     env:
       DOTNET_NOLOGO: true
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      MINVERBUILDMETADATA: build.$GITHUB_RUN_ATTEMPT
 
     steps:
       - name: ☁ Checkout
@@ -28,7 +29,7 @@ jobs:
         run: dotnet restore
 
       - name: 🔨 Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration Release --no-restore /p:MinVerBuildMetadata=${{github.RUN_ATTEMPT}}
 
       # #    - name: Test
       # #      run: dotnet test --no-restore --verbosity normal
