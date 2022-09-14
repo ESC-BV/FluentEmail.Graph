@@ -3,8 +3,6 @@ name: CI
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -14,32 +12,37 @@ jobs:
     env:
       DOTNET_NOLOGO: true
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      MINVERBUILDMETADATA: build.$GITHUB_RUN_ATTEMPT
 
     steps:
-      - name: Checkout
+      - name: ☁ Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: .NET SDK
+      - name: 👷 .NET SDK
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "6.0"
 
-      - name: Install dependencies
+      - name: ⬇ Install dependencies
         run: dotnet restore
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+      - name: 🔨 Build
+        run: dotnet build --configuration Release --no-restore /p:MinVerBuildMetadata=${{ github.run_number }}
 
       # #    - name: Test
       # #      run: dotnet test --no-restore --verbosity normal
 
-      - name: Pack
+      - name: 📦 Pack
         run: dotnet pack ./src/FluentEmail.Graph/FluentEmail.Graph.csproj -c Release -o ./artifacts --no-build
 
-      - name: Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifacts
-          path: artifacts/**/*
+#      - name: Artifacts
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: artifacts
+#          path: artifacts/**/*
+
+      - name: 🚀 Publish to GitHub packages
+        run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/ESC-BV/index.json" --api-key "${{secrets.GITHUB_TOKEN}}"
+        
