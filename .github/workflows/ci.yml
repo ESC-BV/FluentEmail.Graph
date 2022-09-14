@@ -38,8 +38,11 @@ jobs:
       - name: Pack
         run: dotnet pack ./src/FluentEmail.Graph/FluentEmail.Graph.csproj -c Release -o ./artifacts --no-build
 
-      - name: Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifacts
-          path: artifacts/**/*
+#      - name: Artifacts
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: artifacts
+#          path: artifacts/**/*
+
+      - name: Publish to GitHub packages
+        run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }}  --source "github"
