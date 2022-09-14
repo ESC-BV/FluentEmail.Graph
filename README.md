@@ -49,9 +49,11 @@ Starting with v2, if you have included any attachments, the implementation will 
 - The mail is sent
   using [message: send](https://docs.microsoft.com/en-us/graph/api/message-send?view=graph-rest-1.0&tabs=http).
 
+⚠️BREAKING: The `Mail.ReadWrite` permission is required when adding attachments.
+
 [Microsoft Docs on using the Graph API to send large attachments](https://docs.microsoft.com/en-us/graph/outlook-large-attachments?tabs=csharp)
 
-REMOVED: Unfortunately, the Microsoft Graph API `Send` method does not have a `SaveSentItems` argument like
+⚠️REMOVED: Unfortunately, the Microsoft Graph API `Send` method does not have a `SaveSentItems` argument like
 the `SendMail` method
 that was previously used. The `SaveSentItems` option has been removed and there is no way to disable this anymore. (
 See [Link 1](https://docs.microsoft.com/en-us/answers/questions/337574/graph-sdk-i-want-to-send-the-saved-draft-mail-but.html)
@@ -62,9 +64,9 @@ Uploading attachments to a draft message was contributed by [@huntmj01](https://
 
 ## Graph API Permissions
 
-Adding attachments? The `Mail.ReadWrite` permission is required.
+The `Mail.Send` permission must be granted.
 
-Otherwise `Mail.Send`.
+Adding attachments? Then the `Mail.ReadWrite` permissions is also required.
 
 ## Release
 
