@@ -19,18 +19,24 @@
     /// </summary>
     public class GraphSender : ISender
     {
-        private const int ThreeMb = 3145728;
+        private const int ThreeMbLimit = 3145728;
+
         private readonly GraphServiceClient graphClient;
 
         public GraphSender(GraphSenderOptions options)
         {
-            ClientSecretCredential spn = new(options.TenantId, options.ClientId, options.Secret);
-            this.graphClient = new(spn);
+            ClientSecretCredential spn = new (
+                options.TenantId,
+                options.ClientId,
+                options.Secret);
+            this.graphClient = new (spn);
         }
 
         public SendResponse Send(IFluentEmail email, CancellationToken? token = null)
         {
-            return this.SendAsync(email, token).GetAwaiter().GetResult();
+            return this.SendAsync(email, token)
+                .GetAwaiter()
+                .GetResult();
         }
 
         public async Task<SendResponse> SendAsync(IFluentEmail email, CancellationToken? token = null)
@@ -41,26 +47,77 @@
 
                 await this.SendMessage(email, message);
 
-                return new SendResponse
-                {
-                    MessageId = message.Id,
-                };
+                return new SendResponse { MessageId = message.Id, };
             }
             catch (Exception ex)
             {
-                return new SendResponse
-                {
-                    ErrorMessages = new List<string> { ex.Message },
-                };
+                return new SendResponse { ErrorMessages = new List<string> { ex.Message }, };
             }
+        }
+
+        private static IList<Recipient> CreateRecipientList(IEnumerable<Address> addressList)
+        {
+            if (addressList == null)
+            {
+                return new List<Recipient>();
+            }
+
+            return addressList.Select(ConvertToRecipient)
+                .ToList();
+        }
+
+        private static Recipient ConvertToRecipient([NotNull] Address address)
+        {
+            if (address is null)
+            {
+                throw new ArgumentNullException(nameof(address));
+            }
+
+            return new Recipient
+            {
+                EmailAddress = new EmailAddress { Address = address.EmailAddress, Name = address.Name, },
+            };
+        }
+
+        private static void SetPriority(IFluentEmail email, Message draftMessage)
+        {
+            switch (email.Data.Priority)
+            {
+                case Priority.High:
+                    draftMessage.Importance = Importance.High;
+
+                    break;
+
+                case Priority.Normal:
+                    draftMessage.Importance = Importance.Normal;
+
+                    break;
+
+                case Priority.Low:
+                    draftMessage.Importance = Importance.Low;
+
+                    break;
+
+                default:
+                    draftMessage.Importance = Importance.Normal;
+
+                    break;
+            }
+        }
+
+        private static byte[] GetAttachmentBytes(Stream stream)
+        {
+            using var m = new MemoryStream();
+            stream.CopyTo(m);
+
+            return m.ToArray();
         }
 
         private async Task<Message> CreateMessage(IFluentEmail email)
         {
             var templateBody = new ItemBody
             {
-                Content = email.Data.Body,
-                ContentType = email.Data.IsHtml ? BodyType.Html : BodyType.Text,
+                Content = email.Data.Body, ContentType = email.Data.IsHtml ? BodyType.Html : BodyType.Text,
             };
 
             var template = new Message
@@ -74,131 +131,72 @@
                 BccRecipients = CreateRecipientList(email.Data.BccAddresses),
             };
 
-            Message draft = await this.graphClient
-                .Users[email.Data.FromAddress.EmailAddress]
-                .MailFolders
-                .Drafts
-                .Messages
-                .Request()
+            var draftMessage = await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
+                .MailFolders.Drafts.Messages.Request()
                 .AddAsync(template);
 
-            if (email.Data.Attachments != null && email.Data.Attachments.Count > 0)
+            if (email.Data.Attachments is { Count: > 0 })
             {
-                foreach (var a in email.Data.Attachments)
+                foreach (var attachment in email.Data.Attachments)
                 {
-                    if (a.Data.Length < ThreeMb)
+                    if (attachment.Data.Length < ThreeMbLimit)
                     {
-                        await this.UploadAttachmentUnder3Mb(email, draft, a);
+                        await this.UploadAttachmentUnder3Mb(
+                            email,
+                            draftMessage,
+                            attachment);
                     }
                     else
                     {
-                        await this.UploadAttachement3MbOrOver(email, draft, a);
+                        await this.UploadAttachment3MbOrOver(
+                            email,
+                            draftMessage,
+                            attachment);
                     }
                 }
             }
 
-            switch (email.Data.Priority)
-            {
-                case Priority.High:
-                    draft.Importance = Importance.High;
-                    break;
+            SetPriority(email, draftMessage);
 
-                case Priority.Normal:
-                    draft.Importance = Importance.Normal;
-                    break;
-
-                case Priority.Low:
-                    draft.Importance = Importance.Low;
-                    break;
-
-                default:
-                    draft.Importance = Importance.Normal;
-                    break;
-            }
-
-            return draft;
-        }
-
-        private static IList<Recipient> CreateRecipientList(IEnumerable<Address> addressList)
-        {
-            if (addressList == null)
-            {
-                return new List<Recipient>();
-            }
-
-            return addressList
-                .Select(ConvertToRecipient)
-                .ToList();
-        }
-
-        private static Recipient ConvertToRecipient([NotNull] Address address)
-        {
-            if (address is null)
-            {
-                throw new ArgumentNullException(nameof(address));
-            }
-
-            return new Recipient
-            {
-                EmailAddress = new EmailAddress
-                {
-                    Address = address.EmailAddress,
-                    Name = address.Name,
-                },
-            };
+            return draftMessage;
         }
 
         private async Task UploadAttachmentUnder3Mb(IFluentEmail email, Message draft, Core.Models.Attachment a)
         {
             var attachment = new FileAttachment
             {
-                Name = a.Filename,
-                ContentType = a.ContentType,
-                ContentBytes = GetAttachmentBytes(a.Data),
+                Name = a.Filename, ContentType = a.ContentType, ContentBytes = GetAttachmentBytes(a.Data),
             };
 
-            await this.graphClient
-                .Users[email.Data.FromAddress.EmailAddress]
+            await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
                 .Messages[draft.Id]
-                .Attachments
-                .Request()
+                .Attachments.Request()
                 .AddAsync(attachment);
         }
 
-        private static byte[] GetAttachmentBytes(Stream stream)
-        {
-            using var m = new MemoryStream();
-            stream.CopyTo(m);
-            return m.ToArray();
-        }
-
-        private async Task UploadAttachement3MbOrOver(IFluentEmail email, Message draft, Core.Models.Attachment a)
+        private async Task UploadAttachment3MbOrOver(IFluentEmail email, Message draft, Core.Models.Attachment attachment)
         {
             var attachmentItem = new AttachmentItem
             {
-                AttachmentType = AttachmentType.File,
-                Name = a.Filename,
-                Size = a.Data.Length,
+                AttachmentType = AttachmentType.File, Name = attachment.Filename, Size = attachment.Data.Length,
             };
 
-            var uploadSession = await this.graphClient
-                .Users[email.Data.FromAddress.EmailAddress]
+            var uploadSession = await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
                 .Messages[draft.Id]
-                .Attachments
-                .CreateUploadSession(attachmentItem)
+                .Attachments.CreateUploadSession(attachmentItem)
                 .Request()
                 .PostAsync();
 
-            int maxSliceSize = 320 * 1024;
-            var fileUploadTask = new LargeFileUploadTask<FileAttachment>(uploadSession, a.Data, maxSliceSize);
+            var fileUploadTask = new LargeFileUploadTask<FileAttachment>(
+                uploadSession,
+                attachment.Data);
 
             await fileUploadTask.UploadAsync();
         }
 
         private async Task SendMessage(IFluentEmail email, Message message)
         {
-            await this.graphClient
-                .Users[email.Data.FromAddress.EmailAddress]
+            await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
                 .Messages[message.Id]
                 .Send()
                 .Request()
