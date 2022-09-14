@@ -21,7 +21,6 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <MinVerVerbosity>detailed</MinVerVerbosity>
         <MinVerDefaultPreReleasePhase>preview</MinVerDefaultPreReleasePhase>
-        <MinVerMinimumMajorMinor>2.0</MinVerMinimumMajorMinor>
     </PropertyGroup>
 
     <ItemGroup>

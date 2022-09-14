@@ -29,7 +29,7 @@ jobs:
         run: dotnet restore
 
       - name: 🔨 Build
-        run: dotnet build --configuration Release --no-restore /p:MinVerBuildMetadata=${{github.RUN_ATTEMPT}}
+        run: dotnet build --configuration Release --no-restore /p:MinVerBuildMetadata=${{ github.run_number }}
 
       # #    - name: Test
       # #      run: dotnet test --no-restore --verbosity normal
