@@ -37,12 +37,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Identity" Version="1.6.1"/>
-        <PackageReference Include="FluentEmail.Core" Version="3.0.2"/>
+        <PackageReference Include="Azure.Identity" Version="1.6.1" />
+        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="FluentEmail.Core" Version="3.0.2" />
         <PackageReference Include="JetBrains.Annotations" Version="2022.1.0">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Graph" Version="4.39.0"/>
+        <PackageReference Include="Microsoft.Graph" Version="4.39.0" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
