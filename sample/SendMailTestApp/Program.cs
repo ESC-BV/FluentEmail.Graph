@@ -35,7 +35,8 @@ class Program
             return;
         }
 
-        Console.WriteLine("Enter destination e-mail address to send test mail to:");
+        Console.WriteLine("Mail will be sent from: " + fromAddress);
+        Console.WriteLine("Enter destination e-mail address:");
         var destinationAddress = Console.ReadLine();
 
         Console.WriteLine("Add attachments? Type 'Y' for yes.");
@@ -50,13 +51,15 @@ class Program
 
         if (addAttachment)
         {
-            Console.WriteLine("Adding attachments - this will use another Graph API endpoint that needs the Mail.ReadWrite permission.");
+            Console.WriteLine(
+                "Adding attachments - this will use another Graph API endpoint that needs the Mail.ReadWrite permission.");
             email.AttachFromFilename("TestAttachmentSmall.txt");
             email.AttachFromFilename("TestAttachmentLarge.txt");
         }
         else
         {
-            Console.WriteLine("Not adding attachment - this will use default Graph API endpoint that needs the Mail.Send permission.");
+            Console.WriteLine(
+                "Not adding attachment - this will use default Graph API endpoint that needs the Mail.Send permission.");
         }
 
         var response = await sender.SendAsync(email);

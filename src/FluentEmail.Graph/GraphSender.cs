@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -99,11 +98,8 @@
 
             var request = this.graphClient.Users[email.Data.FromAddress.EmailAddress]
                 .Messages.Request();
-            ////.MailFolders.Drafts.Messages.Request();
 
-            Trace.WriteLine(request.RequestUrl);
             var draftMessage = await request.AddAsync(template);
-
             foreach (var attachment in email.Data.Attachments)
             {
                 if (attachment.Data.Length < ThreeMbLimit)
