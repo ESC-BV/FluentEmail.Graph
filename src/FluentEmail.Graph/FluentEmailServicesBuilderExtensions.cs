@@ -3,6 +3,7 @@
     using FluentEmail.Core.Interfaces;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
+    using Microsoft.Graph;
 
     /// <summary>
     /// Contains extension methods to register the <see cref="GraphSender"/> with the <c>FluentEmailServicesBuilder</c> from <c>FluentEmail.Core</c>.
@@ -30,6 +31,14 @@
                 Secret = graphEmailSecret,
             };
             return builder.AddGraphSender(options);
+        }
+
+        public static FluentEmailServicesBuilder AddGraphSender(
+            this FluentEmailServicesBuilder builder,
+            GraphServiceClient graphClient)
+        {
+            builder.Services.TryAdd(ServiceDescriptor.Scoped<ISender>(_ => new GraphSender(graphClient)));
+            return builder;
         }
     }
 }
