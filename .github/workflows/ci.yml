@@ -37,15 +37,8 @@ jobs:
       - name: 📦 Pack
         run: dotnet pack ./src/FluentEmail.Graph/FluentEmail.Graph.csproj -c Release -o ./artifacts --no-build
 
-#      - name: Artifacts
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: artifacts
-#          path: artifacts/**/*
-
       - name: 🔑 Add GitHub packages to nuget sources
         run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/ESC-BV/index.json"
-
 
       - name: 🚀 Publish to GitHub packages
         run: dotnet nuget push "./artifacts/*.nupkg" --source "github"
