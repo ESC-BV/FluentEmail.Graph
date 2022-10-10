@@ -31,6 +31,11 @@
             this.graphClient = new (spn);
         }
 
+        public GraphSender(GraphServiceClient graphClient)
+        {
+            this.graphClient = graphClient;
+        }
+
         public SendResponse Send(IFluentEmail email, CancellationToken? token = null)
         {
             return this.SendAsync(email, token)
