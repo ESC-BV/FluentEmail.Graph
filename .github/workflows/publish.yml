@@ -12,35 +12,32 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
     steps:
-      - name: Checkout
+      - name: ☁ Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: .NET SDK
+      - name: 👷 .NET SDK
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "6.0"
 
-      - name: Install dependencies
+      - name: ⬇ Install dependencies
         run: dotnet restore
 
-      - name: Build
+      - name: 🔨 Build
         run: dotnet build --configuration Release --no-restore
 
       # #    - name: Test
       # #      run: dotnet test --no-restore --verbosity normal
 
-      - name: Pack
+      - name: 📦 Pack
         run: dotnet pack ./src/FluentEmail.Graph/FluentEmail.Graph.csproj -c Release -o ./artifacts --no-build
 
-      - name: Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifacts
-          path: artifacts/**/*
+      - name: 🔑 Add GitHub packages to nuget sources
+        run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/ESC-BV/index.json"
 
-      - name: Push
+      - name: 🚀 Push package to Github and NuGet
         run: |
-          dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/ESC-BV/index.json" --api-key "${{secrets.GITHUB_TOKEN}}"
+          dotnet nuget push "./artifacts/*.nupkg" --source "github"
           dotnet nuget push "./artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "${{secrets.NUGET_API_KEY}}"
