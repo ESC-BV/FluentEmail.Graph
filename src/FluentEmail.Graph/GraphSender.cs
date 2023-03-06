@@ -136,7 +136,7 @@
                 ContentId = a.ContentId,
                 IsInline = a.IsInline,
 
-                // can never be bigger than 3MB, so it is save to cast to int
+                // can never be bigger than 3MB, so it is safe to cast to int
                 Size = (int)a.Data.Length,
             };
 
