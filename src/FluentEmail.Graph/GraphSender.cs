@@ -130,7 +130,14 @@
         {
             var attachment = new FileAttachment
             {
-                Name = a.Filename, ContentType = a.ContentType, ContentBytes = GetAttachmentBytes(a.Data),
+                Name = a.Filename,
+                ContentType = a.ContentType,
+                ContentBytes = GetAttachmentBytes(a.Data),
+                ContentId = a.ContentId,
+                IsInline = a.IsInline,
+
+                // can never be bigger than 3MB, so it is safe to cast to int
+                Size = (int)a.Data.Length,
             };
 
             await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
@@ -146,7 +153,12 @@
         {
             var attachmentItem = new AttachmentItem
             {
-                AttachmentType = AttachmentType.File, Name = attachment.Filename, Size = attachment.Data.Length,
+                AttachmentType = AttachmentType.File,
+                Name = attachment.Filename,
+                Size = attachment.Data.Length,
+                ContentType = attachment.ContentType,
+                ContentId = attachment.ContentId,
+                IsInline = attachment.IsInline,
             };
 
             var uploadSession = await this.graphClient.Users[email.Data.FromAddress.EmailAddress]
