@@ -64,6 +64,14 @@
             }
         }
 
+        private static byte[] GetAttachmentBytes(Stream stream)
+        {
+            using var m = new MemoryStream();
+            stream.CopyTo(m);
+
+            return m.ToArray();
+        }
+
         private async Task<Message> SendWithoutAttachments(IFluentEmail email)
         {
             // https://docs.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=http
@@ -87,14 +95,6 @@
                 .PostAsync();
 
             return draftMessage;
-        }
-
-        private static byte[] GetAttachmentBytes(Stream stream)
-        {
-            using var m = new MemoryStream();
-            stream.CopyTo(m);
-
-            return m.ToArray();
         }
 
         private async Task<Message> CreateDraftMessage(IFluentEmail email)
