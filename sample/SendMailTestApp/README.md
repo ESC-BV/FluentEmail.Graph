@@ -1,6 +1,9 @@
 Set up the config:
 
 ```
+cd sample
+cd SendMailTestApp
+
 dotnet user-secrets init
 
 dotnet user-secrets set "GraphSenderOptions:TenantId" "your value"

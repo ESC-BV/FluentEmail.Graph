@@ -20,8 +20,9 @@
         <Version>0.0.1</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <MinVerVerbosity>detailed</MinVerVerbosity>
-        <MinVerDefaultPreReleasePhase>preview</MinVerDefaultPreReleasePhase>
-        <MinVerMinimumMajorMinor>2.0</MinVerMinimumMajorMinor>
+        <MinVerMinimumMajorMinor>2.3</MinVerMinimumMajorMinor>
+        <PackageReleaseNotes>v2.2 Added support for Headers
+v2.1 Added support for Inline images</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
@@ -43,7 +44,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="FluentEmail.Core" Version="3.0.2" />
-        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0">
+        <PackageReference Include="JetBrains.Annotations" Version="2022.3.1">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Graph" Version="4.39.0" />
@@ -51,7 +52,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="MinVer" Version="4.2.0">
+        <PackageReference Include="MinVer" Version="4.3.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

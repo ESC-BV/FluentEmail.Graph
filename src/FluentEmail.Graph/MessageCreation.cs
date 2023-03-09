@@ -29,6 +29,7 @@ internal static class MessageCreation
         };
 
         SetPriority(email, message);
+        AddHeaders(email, message);
 
         return message;
     }
@@ -81,5 +82,18 @@ internal static class MessageCreation
 
                 break;
         }
+    }
+
+    private static void AddHeaders(IFluentEmail email, Message message)
+    {
+        if (!email.Data.Headers.Any())
+        {
+            return;
+        }
+
+        var headers = email.Data.Headers
+            .Select(header => new InternetMessageHeader { Name = header.Key, Value = header.Value, })
+            .ToList();
+        message.InternetMessageHeaders = headers;
     }
 }

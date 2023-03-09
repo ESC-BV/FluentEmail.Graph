@@ -47,6 +47,7 @@ class Program
             .To(destinationAddress)
             .Subject("Test Email Graph API")
             .Body("This is the <b>body</b> of the mail.");
+        email.Header("X-CustomHeader", "Some value");
         email.Data.IsHtml = true;
 
         if (addAttachment)
