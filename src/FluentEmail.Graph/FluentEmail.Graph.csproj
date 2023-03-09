@@ -22,6 +22,8 @@
         <MinVerVerbosity>detailed</MinVerVerbosity>
         <MinVerDefaultPreReleasePhase>preview</MinVerDefaultPreReleasePhase>
         <MinVerMinimumMajorMinor>2.0</MinVerMinimumMajorMinor>
+        <PackageReleaseNotes>v2.2 Added support for Headers
+v2.1 Added support for Inline images</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
