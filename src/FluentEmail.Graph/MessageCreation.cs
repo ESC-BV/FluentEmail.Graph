@@ -6,7 +6,7 @@ using System.Linq;
 using FluentEmail.Core;
 using FluentEmail.Core.Models;
 using JetBrains.Annotations;
-using Microsoft.Graph;
+using Microsoft.Graph.Models;
 
 internal static class MessageCreation
 {
@@ -34,7 +34,7 @@ internal static class MessageCreation
         return message;
     }
 
-    private static IList<Recipient> CreateRecipientList(IEnumerable<Address> addressList)
+    private static List<Recipient> CreateRecipientList(IEnumerable<Address> addressList)
     {
         if (addressList == null)
         {
@@ -54,7 +54,7 @@ internal static class MessageCreation
 
         return new Recipient
         {
-            EmailAddress = new EmailAddress { Address = address.EmailAddress, Name = address.Name, },
+            EmailAddress = new EmailAddress { Address = address.EmailAddress, Name = address.Name },
         };
     }
 
@@ -92,7 +92,7 @@ internal static class MessageCreation
         }
 
         var headers = email.Data.Headers
-            .Select(header => new InternetMessageHeader { Name = header.Key, Value = header.Value, })
+            .Select(header => new InternetMessageHeader { Name = header.Key, Value = header.Value })
             .ToList();
         message.InternetMessageHeaders = headers;
     }
