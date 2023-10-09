@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <Authors>David De Sloovere</Authors>
+        <Authors>David De Sloovere, Matt Goldman</Authors>
         <Owner>ESC</Owner>
         <Company>ESC</Company>
         <Description>Sender for FluentEmail that uses Microsoft Graph API. Implements `FluentEmail.Core.Interfaces.ISender`.</Description>
