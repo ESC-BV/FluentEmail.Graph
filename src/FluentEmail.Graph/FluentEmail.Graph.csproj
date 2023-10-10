@@ -40,7 +40,7 @@ v2.1 Added support for Inline images
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Azure.Identity" Version="1.8.2"/>
+        <PackageReference Include="Azure.Identity" Version="1.10.2"/>
         <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
