@@ -75,9 +75,3 @@ Create new release with creation of new tag on main branch.
 Start [publish](https://github.com/ESC-BV/FluentEmail.Graph/actions/workflows/publish.yml) manually, for the new tag.
 This will push the package to github and nuget.org
 
-## Origin
-
-Code originally written by [Matt Goldman](https://github.com/matt-goldman)
-and [merged](https://github.com/lukencode/FluentEmail/pull/218) into FluentEmail repo. But it was not published to NuGet
-until January 2021. Because we needed this implementation we created a separate repo, modified the code a bit and
-published it to NuGet.
