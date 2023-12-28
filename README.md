@@ -5,9 +5,9 @@ uses [Microsoft Graph API](https://docs.microsoft.com/en-us/graph/api/resources/
 
 ![Nuget](https://img.shields.io/nuget/v/FluentEmail.Graph)
 
-![CI](https://github.com/ESC-BV/FluentEmail.Graph/workflows/CI/badge.svg)
-![CodeQL](https://github.com/ESC-BV/FluentEmail.Graph/workflows/CodeQL/badge.svg)
-![Publish](https://github.com/ESC-BV/FluentEmail.Graph/workflows/Publish/badge.svg)
+[![CI](https://github.com/ESC-BV/FluentEmail.Graph/actions/workflows/ci.yml/badge.svg)](https://github.com/ESC-BV/FluentEmail.Graph/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/ESC-BV/FluentEmail.Graph/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ESC-BV/FluentEmail.Graph/actions/workflows/codeql-analysis.yml)
+[![Publish](https://github.com/ESC-BV/FluentEmail.Graph/actions/workflows/publish.yml/badge.svg)](https://github.com/ESC-BV/FluentEmail.Graph/actions/workflows/publish.yml)
 
 ## Usage
 
